@@ -19,12 +19,20 @@ namespace DAL.Repository
 
         public IEnumerable<Article> GetAll()
         {
-            return db.Articles;
+            return db.Articles
+                .Include(a => a.Tags)
+                .Include(a => a.Category)
+                .Include(a => a.User)
+                .ToList();
         }
 
         public Article Get(int id)
         {
-            return db.Articles.Find(id);
+            return db.Articles
+                .Include(a => a.Tags)
+                .Include(a => a.Category)
+                .Include(a => a.User)
+                .First(a => a.Id == id);
         }
 
         public void Create(Article article)
@@ -39,7 +47,11 @@ namespace DAL.Repository
 
         public IEnumerable<Article> Find(Func<Article, Boolean> predicate)
         {
-            return db.Articles.Where(predicate).ToList();
+            return db.Articles
+                .Include(a => a.Tags)
+                .Include(a => a.Category)
+                .Include(a => a.User)
+                .Where(predicate).ToList();
         }
 
         public void Delete(int id)
