@@ -24,9 +24,7 @@ namespace DAL.Entity
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string User { get; set; }
 
         public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }

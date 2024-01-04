@@ -29,14 +29,6 @@ namespace BLL.Services
             }
         }
 
-        public UserService UserService
-        {
-            get
-            {
-                return new UserService(GetUnitOfWork());
-            }
-        }
-
         public CategoryService CategoryService
         {
             get

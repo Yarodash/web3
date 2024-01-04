@@ -11,7 +11,7 @@ namespace BLL.DTO
         public string Content { get; set; }
         public DateTime Time { get; set; }
         public CategoryDTO Category { get; set; }
-        public UserDTO User { get; set; }
+        public string User { get; set; }
         public IList<TagDTO> Tags { get; set; } = new List<TagDTO>();
 
         public override string ToString()

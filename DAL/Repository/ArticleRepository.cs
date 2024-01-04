@@ -22,7 +22,6 @@ namespace DAL.Repository
             return db.Articles
                 .Include(a => a.Tags)
                 .Include(a => a.Category)
-                .Include(a => a.User)
                 .ToList();
         }
 
@@ -31,7 +30,6 @@ namespace DAL.Repository
             return db.Articles
                 .Include(a => a.Tags)
                 .Include(a => a.Category)
-                .Include(a => a.User)
                 .First(a => a.Id == id);
         }
 
@@ -50,7 +48,6 @@ namespace DAL.Repository
             return db.Articles
                 .Include(a => a.Tags)
                 .Include(a => a.Category)
-                .Include(a => a.User)
                 .Where(predicate).ToList();
         }
 

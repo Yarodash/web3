@@ -36,7 +36,7 @@ namespace BLL.Services
                 Title = item.Title,
                 Content = item.Content,
                 CategoryId = item.Category.Id,
-                UserId = item.User.Id,
+                User = item.User,
                 Time = DateTime.Now
             });
             DataBase.Save();
@@ -67,7 +67,7 @@ namespace BLL.Services
                 Title = article.Title,
                 Content = article.Content,
                 Category = new CategoryDTO { Id = article.Category.Id, Name = article.Category.Name },
-                User = new UserDTO { Id = article.User.Id, Login = article.User.Login },
+                User = article.User,
                 Time = article.Time,
             };
 
@@ -90,7 +90,7 @@ namespace BLL.Services
                     Title = article.Title,
                     Content = article.Content,
                     Category = new CategoryDTO { Id = article.Category.Id, Name = article.Category.Name },
-                    User = new UserDTO { Id = article.User.Id, Login = article.User.Login },
+                    User = article.User,
                     Time = article.Time,
                 };
 
@@ -117,7 +117,7 @@ namespace BLL.Services
             article.Title = item.Title;
             article.Content = item.Content;
             article.CategoryId = item.Category.Id;
-            article.UserId = item.User.Id;
+            article.User = item.User;
 
             DataBase.Articles.Update(article);
             DataBase.Save();

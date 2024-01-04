@@ -9,7 +9,6 @@ namespace DAL.Interfaces
     {
         ITagRepository Tags { get; }
         ICategoryRepository Categories { get; }
-        IUserRepository Users { get; }
         IArticleRepository Articles { get; }
         void Save();
     }

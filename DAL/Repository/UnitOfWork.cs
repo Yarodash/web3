@@ -12,7 +12,6 @@ namespace DAL.Repository
         private readonly AppDbContext db;
         private TagRepository tag_repository;
         private CategoryRepository category_repository;
-        private UserRepository user_repository;
         private ArticleRepository article_repository;
 
         public UnitOfWork(DbContextOptions<AppDbContext> options)
@@ -35,15 +34,6 @@ namespace DAL.Repository
             {
                 category_repository ??= new CategoryRepository(db);
                 return category_repository;
-            }
-        }
-
-        public IUserRepository Users
-        {
-            get
-            {
-                user_repository ??= new UserRepository(db);
-                return user_repository;
             }
         }
 

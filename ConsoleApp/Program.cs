@@ -29,44 +29,6 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
-        static void RegisterUser()
-        {
-            Console.Write("Login: ");
-            string login = Console.ReadLine();
-
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-
-            services.UserService.Register(new UserDTO { Login = login }, password);
-        }
-
-        static void ShowUsers()
-        {
-            foreach (var user in services.UserService.GetAll())
-            {
-                Console.WriteLine("User Id={0} Login={1}", user.Id, user.Login);
-            }
-        }
-
-        static void DeleteUser()
-        {
-            Console.Write("User Id: ");
-            int userId = Convert.ToInt32(Console.ReadLine());
-
-            services.UserService.Delete(userId);
-        }
-
-        static void ChangeUser()
-        {
-            Console.Write("User Id: ");
-            int userId = Convert.ToInt32(Console.ReadLine());
-
-            Console.Write("Login: ");
-            string login = Console.ReadLine();
-
-            services.UserService.Update(new UserDTO { Id = userId, Login = login });
-        }
-
         static void CreateTag()
         {
             Console.Write("Tag Name: ");
@@ -145,8 +107,8 @@ namespace ConsoleApp
             Console.Write("Article Content: ");
             string articleContent = Console.ReadLine();
 
-            Console.Write("Article AuthorId: ");
-            int authorId = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Article Author: ");
+            string author = Console.ReadLine();
 
             Console.Write("Article CategoryId: ");
             int categoryId = Convert.ToInt32(Console.ReadLine());
@@ -154,7 +116,7 @@ namespace ConsoleApp
             services.ArticleService.Create(new ArticleDTO { 
                 Title = articleTitle,
                 Content = articleContent,
-                User = new UserDTO { Id = authorId },
+                User = author,
                 Category = new CategoryDTO { Id = categoryId },
             });
         }
@@ -228,28 +190,6 @@ namespace ConsoleApp
             Wait();
         }
 
-        static void MenuUser()
-        {
-            Console.Clear();
-            Console.WriteLine("User Service Menu:");
-            Console.WriteLine("1. Register User");
-            Console.WriteLine("2. Show Users");
-            Console.WriteLine("3. Delete User");
-            Console.WriteLine("4. Change User");
-
-            int option = Convert.ToInt32(Console.ReadLine());
-
-            switch (option)
-            {
-                case 1: RegisterUser(); break;
-                case 2: ShowUsers(); break;
-                case 3: DeleteUser(); break;
-                case 4: ChangeUser(); break;
-            }
-
-            Wait();
-        }
-
         static void MenuArticle()
         {
             Console.Clear();
@@ -276,8 +216,7 @@ namespace ConsoleApp
             Console.WriteLine("Select option:");
             Console.WriteLine("1. Tag service");
             Console.WriteLine("2. Category service");
-            Console.WriteLine("3. User service");
-            Console.WriteLine("4. Article service");
+            Console.WriteLine("3. Article service");
 
             int option = Convert.ToInt32(Console.ReadLine());
 
@@ -285,8 +224,7 @@ namespace ConsoleApp
             {
                 case 1: MenuTag(); break;
                 case 2: MenuCategory(); break;
-                case 3: MenuUser(); break;
-                case 4: MenuArticle(); break;
+                case 3: MenuArticle(); break;
             }
         }
 
