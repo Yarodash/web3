@@ -30,7 +30,7 @@ namespace DAL.Repository
             return db.Articles
                 .Include(a => a.Tags)
                 .Include(a => a.Category)
-                .First(a => a.Id == id);
+                .FirstOrDefault(a => a.Id == id);
         }
 
         public void Create(Article article)

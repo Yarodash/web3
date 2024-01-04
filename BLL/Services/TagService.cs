@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using BLL.DTO;
-using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entity;
 using DAL.Interfaces;
 using DAL.Repository;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BLL.Services
@@ -42,35 +42,41 @@ namespace BLL.Services
 
             if (tag == null)
             {
-                throw new ValidationException("Tag not found", "");
+                throw new ValidationException("Tag not found");
             }
 
             return new TagDTO { Id = tag.Id, Name = tag.Name };
         }
 
-        public void Create(TagDTO item)
+        public TagDTO Create(TagDTO item)
         {
             if (string.IsNullOrWhiteSpace(item.Name))
             {
-                throw new ValidationException("Tag name cannot be empty or whitespace", "");
+                throw new ValidationException("Tag name cannot be empty or whitespace");
             }
 
-            DataBase.Tags.Create(new Tag { Name = item.Name });
+            var tag = new Tag { Name = item.Name };
+
+            DataBase.Tags.Create(tag);
             DataBase.Save();
+
+            return Get(tag.Id);
         }
 
-        public void Update(TagDTO item)
+        public TagDTO Update(int id, TagDTO item)
         {
-            var tag = DataBase.Tags.Get(item.Id);
+            var tag = DataBase.Tags.Get(id);
 
             if (tag == null)
             {
-                throw new ValidationException("Tag not found", "");
+                throw new ValidationException("Tag not found");
             }
 
             tag.Name = item.Name;
             DataBase.Tags.Update(tag);
             DataBase.Save();
+
+            return Get(id);
         }
 
         public void Delete(int id)

@@ -1,5 +1,4 @@
 ﻿using BLL.DTO;
-using BLL.Infrastructure;
 using BLL.Services;
 using DAL.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +60,7 @@ namespace ConsoleApp
             Console.Write("Tag Name: ");
             string tagName = Console.ReadLine();
 
-            services.TagService.Update(new TagDTO { Id = tagId, Name = tagName });
+            services.TagService.Update(tagId, new TagDTO { Name = tagName });
         }
 
         static void CreateCategory()
@@ -96,7 +95,7 @@ namespace ConsoleApp
             Console.Write("Category Name: ");
             string categoryName = Console.ReadLine();
 
-            services.CategoryService.Update(new CategoryDTO { Id = categoryId, Name = categoryName });
+            services.CategoryService.Update(categoryId, new CategoryDTO { Name = categoryName });
         }
 
         static void CreateArticle()
@@ -113,11 +112,12 @@ namespace ConsoleApp
             Console.Write("Article CategoryId: ");
             int categoryId = Convert.ToInt32(Console.ReadLine());
 
-            services.ArticleService.Create(new ArticleDTO { 
+            services.ArticleService.Create(new ArticleDTO
+            {
                 Title = articleTitle,
                 Content = articleContent,
                 User = author,
-                Category = new CategoryDTO { Id = categoryId },
+                CategoryId = categoryId,
             });
         }
         static void AddTagToArticle()
@@ -139,7 +139,7 @@ namespace ConsoleApp
                     article.Id,
                     article.Title,
                     article.Content,
-                    article.Category,
+                    article.CategoryId,
                     string.Join(", ", article.Tags),
                     article.Time.ToString()
                 );

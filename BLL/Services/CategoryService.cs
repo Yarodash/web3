@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BLL.DTO;
-using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entity;
 using DAL.Interfaces;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BLL.Services
 {
@@ -39,35 +39,41 @@ namespace BLL.Services
 
             if (category == null)
             {
-                throw new ValidationException("Category not found", "");
+                throw new ValidationException("Category not found");
             }
 
             return new CategoryDTO { Id = category.Id, Name = category.Name };
         }
 
-        public void Create(CategoryDTO item)
+        public CategoryDTO Create(CategoryDTO item)
         {
             if (string.IsNullOrWhiteSpace(item.Name))
             {
-                throw new ValidationException("Category name cannot be empty or whitespace", "");
+                throw new ValidationException("Category name cannot be empty or whitespace");
             }
 
-            DataBase.Categories.Create(new Category { Name = item.Name });
+            var category = new Category { Name = item.Name };
+
+            DataBase.Categories.Create(category);
             DataBase.Save();
+
+            return Get(category.Id);
         }
 
-        public void Update(CategoryDTO item)
+        public CategoryDTO Update(int id, CategoryDTO item)
         {
-            var category = DataBase.Categories.Get(item.Id);
+            var category = DataBase.Categories.Get(id);
 
             if (category == null)
             {
-                throw new ValidationException("Category not found", "");
+                throw new ValidationException("Category not found");
             }
 
             category.Name = item.Name;
             DataBase.Categories.Update(category);
             DataBase.Save();
+
+            return Get(id);
         }
 
         public void Delete(int id)

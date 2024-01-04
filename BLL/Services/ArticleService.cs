@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BLL.DTO;
-using BLL.Infrastructure;
 using BLL.Interfaces;
 using DAL.Entity;
 using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -18,40 +18,7 @@ namespace BLL.Services
         public ArticleService(IUnitOfWork uow)
         {
             DataBase = uow;
-        }
-
-        public void Create(ArticleDTO item)
-        {
-            if (string.IsNullOrWhiteSpace(item.Title))
-            {
-                throw new ValidationException("Article title cannot be empty or whitespace", "");
-            }
-
-            if (string.IsNullOrWhiteSpace(item.Content))
-            {
-                throw new ValidationException("Article content cannot be empty or whitespace", "");
-            }
-
-            DataBase.Articles.Create(new Article {
-                Title = item.Title,
-                Content = item.Content,
-                CategoryId = item.Category.Id,
-                User = item.User,
-                Time = DateTime.Now
-            });
-            DataBase.Save();
-        }
-
-        public void Delete(int id)
-        {
-            DataBase.Articles.Delete(id);
-            DataBase.Save();
-        }
-
-        public void Dispose()
-        {
-            DataBase.Dispose();
-        }
+        }  
 
         public ArticleDTO Get(int id)
         {
@@ -59,21 +26,22 @@ namespace BLL.Services
 
             if (article == null)
             {
-                throw new ValidationException("Article not found", "");
+                throw new ValidationException("Article not found");
             }
 
             var articleDto = new ArticleDTO
             {
+                Id = article.Id,
                 Title = article.Title,
                 Content = article.Content,
-                Category = new CategoryDTO { Id = article.Category.Id, Name = article.Category.Name },
+                CategoryId = article.CategoryId,
                 User = article.User,
                 Time = article.Time,
             };
 
             foreach (var tag in article.Tags)
             {
-                articleDto.Tags.Add(new TagDTO { Id = tag.Id, Name = tag.Name });
+                articleDto.Tags.Add(tag.Id);
             }
 
             return articleDto;
@@ -87,16 +55,17 @@ namespace BLL.Services
             {
                 var articleDto = new ArticleDTO
                 {
+                    Id = article.Id,
                     Title = article.Title,
                     Content = article.Content,
-                    Category = new CategoryDTO { Id = article.Category.Id, Name = article.Category.Name },
+                    CategoryId = article.CategoryId,
                     User = article.User,
                     Time = article.Time,
                 };
 
                 foreach (var tag in article.Tags)
                 {
-                    articleDto.Tags.Add(new TagDTO { Id = tag.Id, Name = tag.Name });
+                    articleDto.Tags.Add(tag.Id);
                 }
 
                 articlesDTO.Add(articleDto);
@@ -105,43 +74,97 @@ namespace BLL.Services
             return articlesDTO;
         }
 
-        public void Update(ArticleDTO item)
+        public ArticleDTO Create(ArticleDTO item)
         {
-            var article = DataBase.Articles.Get(item.Id);
+            if (string.IsNullOrWhiteSpace(item.Title))
+            {
+                throw new ValidationException("Article title cannot be empty or whitespace");
+            }
+
+            if (string.IsNullOrWhiteSpace(item.Content))
+            {
+                throw new ValidationException("Article content cannot be empty or whitespace");
+            }
+
+            var category = DataBase.Categories.Get(item.CategoryId);
+
+            if (category == null)
+            {
+                throw new ValidationException("Category not found");
+            }
+
+            var article = new Article
+            {
+                Title = item.Title,
+                Content = item.Content,
+                CategoryId = item.CategoryId,
+                User = item.User,
+                Time = DateTime.Now
+            };
+            
+            DataBase.Articles.Create(article);
+            UpdateTags(article, item.Tags);
+            DataBase.Save();
+
+            return Get(article.Id);
+        }
+
+        public ArticleDTO Update(int id, ArticleDTO item)
+        {
+            var article = DataBase.Articles.Get(id);
 
             if (article == null)
             {
-                throw new ValidationException("Article not found", "");
+                throw new ValidationException("Article not found");
+            }
+
+            var category = DataBase.Categories.Get(item.CategoryId);
+
+            if (category == null)
+            {
+                throw new ValidationException("Category not found");
             }
 
             article.Title = item.Title;
             article.Content = item.Content;
-            article.CategoryId = item.Category.Id;
+            article.CategoryId = item.CategoryId;
             article.User = item.User;
 
             DataBase.Articles.Update(article);
+            UpdateTags(article, item.Tags);
+            DataBase.Save();
+
+            return Get(id);
+        }
+
+        private void UpdateTags(Article article, IEnumerable<int> tags)
+        {
+            article.Tags = article.Tags.Where(tag => tags.Contains(tag.Id)).ToList();
+
+            foreach (var tag in tags) { 
+                if (!article.Tags.Select(t => t.Id).Contains(tag))
+                {
+                    var tagEntity = DataBase.Tags.Get(tag);
+
+                    if (tagEntity == null)
+                    {
+                        throw new ValidationException("Tag not found");
+                    }
+
+                    article.Tags.Add(tagEntity);
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            DataBase.Articles.Delete(id);
             DataBase.Save();
         }
 
-        public void AddTag(int articleId, int tagId)
+        public void Dispose()
         {
-            var article = DataBase.Articles.Get(articleId);
-
-            if (article == null)
-            {
-                throw new ValidationException("Article not found", "");
-            }
-
-            var tag = DataBase.Tags.Get(tagId);
-
-            if (tag == null)
-            {
-                throw new ValidationException("Tag not found", "");
-            }
-
-            article.Tags.Add(tag);
-            DataBase.Articles.Update(article);
-            DataBase.Save();
+            DataBase.Dispose();
         }
     }
 }

@@ -10,13 +10,13 @@ namespace BLL.DTO
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Time { get; set; }
-        public CategoryDTO Category { get; set; }
+        public int CategoryId { get; set; }
         public string User { get; set; }
-        public IList<TagDTO> Tags { get; set; } = new List<TagDTO>();
+        public IList<int> Tags { get; set; } = new List<int>();
 
         public override string ToString()
         {
-            return $"ArticleDTO(Id: {Id}, Title: {Title}, Content: {Content}, Time: {Time}, Category: {Category}, User: {User}, Tags: [{string.Join(", ", Tags)}])";
+            return $"ArticleDTO(Id: {Id}, Title: {Title}, Content: {Content}, Time: {Time}, CategoryId: {CategoryId}, User: {User}, Tags: [{string.Join(", ", Tags)}])";
         }
     }
 }

@@ -7,6 +7,5 @@ namespace BLL.Interfaces
 {
     public interface IArticleService : IService<ArticleDTO> 
     {
-        void AddTag(int articleId, int tagId);
     }
 }
