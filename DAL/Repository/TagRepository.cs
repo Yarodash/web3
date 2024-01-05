@@ -19,12 +19,12 @@ namespace DAL.Repository
 
         public IEnumerable<Tag> GetAll()
         {
-            return db.Tags;
+            return db.Tags.Include(t => t.Articles);
         }
 
         public Tag Get(int id)
         {
-            return db.Tags.Find(id);
+            return db.Tags.Include(t => t.Articles).FirstOrDefault(t => t.Id == id);
         }
 
         public void Create(Tag tag)

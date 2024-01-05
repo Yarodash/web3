@@ -8,7 +8,6 @@ namespace BLL.Interfaces
     public interface ITagService : IService<TagDTO>
     {
         IEnumerable<ArticleDTO> GetNews(int id);
-
         IEnumerable<TagDTO> GetTags(string partName);
     }
 }

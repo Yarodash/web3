@@ -1,0 +1,22 @@
+.article-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  h3, h4, h5, h6 {
+    font-size: 20px;
+  }
+
+  .article-page__tags {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  h6 {
+    a {
+      text-decoration: none;
+      color: blue;
+    }
+  }
+}

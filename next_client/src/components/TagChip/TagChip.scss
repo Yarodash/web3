@@ -1,0 +1,11 @@
+.tag-chip {
+  background: #3250ae;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #F7F8F0;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}

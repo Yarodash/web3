@@ -1,0 +1,11 @@
+.tag-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  & > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}

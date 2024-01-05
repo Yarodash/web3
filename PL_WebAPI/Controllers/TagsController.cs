@@ -36,6 +36,13 @@ namespace PL.Controllers
             return Ok(TagModel.FromDTO(tagService.Get(id)));
         }
 
+        [HttpGet("{id}/articles")]
+        public ActionResult<IEnumerable<ArticleModel>> GetArticles(int id)
+        {
+            var articles = tagService.GetNews(id);
+            return Ok(articles.Select(a => ArticleModel.FromDTO(a)));
+        }
+
         [HttpGet("filter/{partName}")]
         public ActionResult<IEnumerable<TagModel>> GetByPartName(string partName)
         {
