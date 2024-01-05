@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
 
 namespace ConsoleApp
 {
@@ -112,30 +113,25 @@ namespace ConsoleApp
             Console.Write("Article CategoryId: ");
             int categoryId = Convert.ToInt32(Console.ReadLine());
 
+            Console.Write("Article Tags: ");
+            string tags = Console.ReadLine();
+            List<int> tagList = tags.Split(',').Select(t => int.Parse(t)).ToList();
+
             services.ArticleService.Create(new ArticleDTO
             {
                 Title = articleTitle,
                 Content = articleContent,
                 User = author,
                 CategoryId = categoryId,
+                Tags = tagList,
             });
-        }
-        static void AddTagToArticle()
-        {
-            Console.Write("Article id: ");
-            int articleId = Convert.ToInt32(Console.ReadLine());
-
-            Console.Write("Tag id: ");
-            int tagId = Convert.ToInt32(Console.ReadLine());
-
-            services.ArticleService.AddTag(articleId, tagId);
         }
 
         static void ShowArticles()
         {
             foreach (var article in services.ArticleService.GetAll())
             {
-                Console.WriteLine("Article #{0} Title={1}\n=====\n{2}\n-----\nCategoryId={3}\nTagIds=[{4}]\nTime={5}\n=====",
+                Console.WriteLine("Article Id={0}\nTitle={1}\n=====\n{2}\n-----\nCategoryId={3}\nTagIds=[{4}]\nTime={5}\n=====\n\n\n",
                     article.Id,
                     article.Title,
                     article.Content,
@@ -203,7 +199,6 @@ namespace ConsoleApp
             switch (option)
             {
                 case 1: CreateArticle(); break;
-                case 2: AddTagToArticle(); break;
                 case 3: ShowArticles(); break;
             }
 
@@ -234,15 +229,14 @@ namespace ConsoleApp
 
             while (true)
             {
-                Menu();
-                /*try
+                try
                 {
                     Menu();
-                } catch (ValidationException e)
+                } catch (Exception ex)
                 {
-                    Console.WriteLine("ERROR", e.msg);
+                    Console.WriteLine("ERROR", ex.Message);
                     Wait();
-                }*/
+                }
             }
         }
     }
