@@ -26,7 +26,7 @@ namespace PL.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<TagModel>> GetAll()
         {
-            IEnumerable<TagDTO> tags = tagService.GetAll();
+            var tags = tagService.GetAll();
             return Ok(tags.Select(tag => TagModel.FromDTO(tag)));
         }
 
@@ -34,6 +34,13 @@ namespace PL.Controllers
         public ActionResult<TagModel> Get(int id)
         {
             return Ok(TagModel.FromDTO(tagService.Get(id)));
+        }
+
+        [HttpGet("filter/{partName}")]
+        public ActionResult<IEnumerable<TagModel>> GetByPartName(string partName)
+        {
+            var tags = tagService.GetTags(partName);
+            return Ok(tags.Select(tag => TagModel.FromDTO(tag)));
         }
 
         [HttpPost]

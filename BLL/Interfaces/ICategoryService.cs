@@ -8,5 +8,6 @@ namespace BLL.Interfaces
     public interface ICategoryService : IService<CategoryDTO>
     {
         IEnumerable<ArticleDTO> GetNews(int id);
+        IEnumerable<CategoryDTO> GetCategories(string partName);
     }
 }

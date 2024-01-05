@@ -7,6 +7,7 @@ using DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace BLL.Services
@@ -83,6 +84,13 @@ namespace BLL.Services
         {
             DataBase.Tags.Delete(id);
             DataBase.Save();
+        }
+
+        public IEnumerable<TagDTO> GetTags(string partName)
+        {
+            var tags = DataBase.Tags.Find(t => t.Name.ToLower().Contains(partName.ToLower()));
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Tag, TagDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Tag>, List<TagDTO>>(tags);
         }
 
         public void Dispose()

@@ -82,6 +82,13 @@ namespace BLL.Services
             DataBase.Save();
         }
 
+        public IEnumerable<CategoryDTO> GetCategories(string partName)
+        {
+            var categories = DataBase.Categories.Find(c => c.Name.ToLower().Contains(partName.ToLower()));
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Category>, List<CategoryDTO>>(categories);
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

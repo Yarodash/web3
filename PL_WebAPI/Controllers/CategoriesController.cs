@@ -26,7 +26,7 @@ namespace PL.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CategoryModel>> GetAll()
         {
-            IEnumerable<CategoryDTO> categories = categoryService.GetAll();
+            var categories = categoryService.GetAll();
             return Ok(categories.Select(c => CategoryModel.FromDTO(c)));
         }
 
@@ -34,6 +34,13 @@ namespace PL.Controllers
         public ActionResult<CategoryModel> Get(int id)
         {
             return Ok(CategoryModel.FromDTO(categoryService.Get(id)));
+        }
+
+        [HttpGet("filter/{partName}")]
+        public ActionResult<IEnumerable<CategoryModel>> GetByPartName(string partName)
+        {
+            var categories = categoryService.GetCategories(partName);
+            return Ok(categories.Select(c => CategoryModel.FromDTO(c)));
         }
 
         [HttpPost]
